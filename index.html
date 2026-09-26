@@ -3,327 +3,902 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>THE LAST 15</title>
+<title>THE LOCKER</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;
- background:#05070d;
- color:white;
- font-family:Arial,sans-serif;
- min-height:100vh;
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#080914;
+color:#fff;
+overflow-x:hidden;
 }
-.container{
- max-width:520px;
- margin:auto;
- padding:25px 18px;
+button,input{font:inherit}
+
+.screen{
+min-height:100vh;
+display:none;
+position:relative;
+overflow:hidden;
 }
+.screen.active{display:block}
+
+/* OPENING */
+#opening{
+background:
+radial-gradient(circle at 50% 20%,#3b1b72 0,#111332 35%,#05060d 75%);
+text-align:center;
+padding:35px 20px;
+}
+.stars{
+position:absolute;
+inset:0;
+background-image:
+radial-gradient(#fff 1px,transparent 1px),
+radial-gradient(#6df 1px,transparent 1px);
+background-size:55px 55px,90px 90px;
+opacity:.18;
+animation:drift 12s linear infinite;
+}
+@keyframes drift{
+from{transform:translateY(0)}
+to{transform:translateY(-55px)}
+}
+
 .logo{
- text-align:center;
- letter-spacing:5px;
- font-size:14px;
- color:#aaa;
- margin-top:15px;
+position:relative;
+margin-top:45px;
+font-size:13px;
+letter-spacing:5px;
+color:#9be8ff;
 }
-h1{
- text-align:center;
- font-size:42px;
- margin:15px 0 5px;
- letter-spacing:3px;
+.title{
+position:relative;
+font-size:48px;
+font-weight:900;
+letter-spacing:5px;
+margin:18px 0 5px;
+text-shadow:0 0 25px #7c5cff;
 }
-.sub{
- text-align:center;
- color:#aaa;
- font-size:13px;
- letter-spacing:2px;
+.subtitle{
+position:relative;
+color:#c9c9e9;
+letter-spacing:2px;
+font-size:13px;
 }
-.card{
- background:#0d111c;
- border:1px solid #293044;
- border-radius:18px;
- padding:22px;
- margin-top:25px;
- box-shadow:0 0 30px #000;
+.house-icon{
+position:relative;
+font-size:100px;
+margin:55px auto 25px;
+filter:drop-shadow(0 0 25px #6c63ff);
+animation:float 3s ease-in-out infinite;
 }
-label{
- display:block;
- color:#aaa;
- margin-bottom:8px;
- font-size:13px;
+@keyframes float{
+50%{transform:translateY(-10px)}
 }
-input{
- width:100%;
- padding:15px;
- border-radius:10px;
- border:1px solid #394156;
- background:#080b13;
- color:white;
- font-size:16px;
- outline:none;
+
+.warning{
+position:relative;
+display:inline-block;
+padding:10px 20px;
+border:1px solid #ff4d9d;
+border-radius:30px;
+color:#ff9bc8;
+font-size:12px;
+letter-spacing:2px;
+margin-bottom:30px;
 }
-button{
- width:100%;
- padding:15px;
- margin-top:15px;
- border:0;
- border-radius:10px;
- background:#b9c0cc;
- color:#05070d;
- font-size:16px;
- font-weight:bold;
- cursor:pointer;
+
+.mainbtn{
+position:relative;
+border:0;
+padding:16px 34px;
+border-radius:40px;
+background:linear-gradient(90deg,#7c4dff,#00d9ff);
+color:white;
+font-weight:bold;
+letter-spacing:2px;
+box-shadow:0 0 30px #6d4cff88;
+cursor:pointer;
 }
-button:hover{background:white}
-.hidden{display:none}
-.status{
- text-align:center;
- color:#aaa;
- margin:15px 0;
+.mainbtn:active{transform:scale(.96)}
+
+.small{
+position:relative;
+font-size:11px;
+color:#888;
+margin-top:20px;
+}
+
+/* GAME */
+#game{
+background:
+radial-gradient(circle at 50% 20%,#25255b,#0b0c18 55%,#05050a);
+}
+.topbar{
+height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:10px 16px;
+border-bottom:1px solid #303052;
+background:#0b0b18dd;
+backdrop-filter:blur(10px);
+position:relative;
+z-index:10;
 }
 .round{
- text-align:center;
- color:#d8dce5;
- letter-spacing:3px;
- font-size:13px;
+font-size:11px;
+letter-spacing:2px;
+color:#8eeaff;
 }
 .timer{
- text-align:center;
- font-size:48px;
- font-weight:bold;
- margin:20px 0;
+font-size:25px;
+font-weight:bold;
+color:#fff;
 }
-.question{
- font-size:20px;
- line-height:1.5;
- text-align:center;
+.timer.danger{
+color:#ff527d;
+animation:pulse .7s infinite;
 }
-.answer{
- margin-top:20px;
+@keyframes pulse{
+50%{text-shadow:0 0 18px #ff174f}
 }
-.choice{
- background:#151b29;
- color:white;
- border:1px solid #343d52;
+
+.house{
+max-width:500px;
+margin:auto;
+padding:18px;
 }
-.choice:hover{
- background:#252d40;
+
+.instruction{
+text-align:center;
+margin:5px 0 15px;
+font-size:14px;
+color:#bcbcdc;
 }
-.correct{
- color:#67e8a5;
- text-align:center;
- margin-top:15px;
+
+.room{
+height:440px;
+position:relative;
+border:2px solid #38386b;
+border-radius:24px;
+overflow:hidden;
+background:
+linear-gradient(#252752 0 57%,#18182c 57%);
+box-shadow:0 0 35px #000;
 }
-.footer{
- text-align:center;
- color:#555;
- font-size:11px;
- margin-top:35px;
- letter-spacing:2px;
+
+/* WINDOW */
+.window{
+position:absolute;
+left:25px;
+top:30px;
+width:105px;
+height:100px;
+border:6px solid #5960a4;
+background:linear-gradient(135deg,#271e55,#1a79a0);
+box-shadow:inset 0 0 30px #000;
 }
-.badge{
- display:inline-block;
- padding:7px 12px;
- border:1px solid #555;
- border-radius:20px;
- font-size:11px;
- color:#aaa;
- margin-bottom:15px;
+.moon{
+width:30px;height:30px;
+border-radius:50%;
+background:#fff5ba;
+position:absolute;
+right:12px;top:12px;
+box-shadow:0 0 20px #fff;
+}
+
+/* PAINTING */
+.painting{
+position:absolute;
+right:25px;
+top:35px;
+width:100px;
+height:120px;
+background:linear-gradient(135deg,#ffcc70,#ff4f9a,#7357ff);
+border:8px solid #ad7c42;
+box-shadow:0 0 20px #000;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;
+}
+.painting span{
+background:#080914dd;
+padding:7px;
+border-radius:8px;
+}
+
+/* SOFA */
+.sofa{
+position:absolute;
+left:35px;
+bottom:70px;
+width:210px;
+height:105px;
+background:linear-gradient(#9d4dff,#5421a0);
+border-radius:35px 35px 15px 15px;
+box-shadow:0 15px 25px #000;
+cursor:pointer;
+}
+.sofa:before{
+content:"";
+position:absolute;
+left:-10px;right:-10px;top:-25px;
+height:55px;
+border-radius:30px;
+background:#8140d4;
+}
+.sofa:after{
+content:"";
+position:absolute;
+left:10px;right:10px;bottom:-12px;
+height:15px;
+background:#32165c;
+border-radius:10px;
+}
+
+/* TABLE */
+.table{
+position:absolute;
+left:275px;
+bottom:70px;
+width:125px;
+height:75px;
+background:#8b522c;
+border-radius:10px;
+cursor:pointer;
+box-shadow:0 15px 25px #000;
+}
+.table:after{
+content:"";
+position:absolute;
+left:20px;right:20px;
+bottom:-55px;
+height:60px;
+border-left:12px solid #60351f;
+border-right:12px solid #60351f;
+}
+
+/* BOOK */
+.book{
+position:absolute;
+left:30px;
+top:-25px;
+width:65px;
+height:16px;
+background:#ffda55;
+border-radius:3px;
+transform:rotate(-5deg);
+cursor:pointer;
+}
+
+/* DRAWER */
+.drawer{
+position:absolute;
+right:35px;
+bottom:65px;
+width:85px;
+height:105px;
+background:#62351f;
+border:5px solid #432313;
+cursor:pointer;
+}
+.drawer:after{
+content:"";
+position:absolute;
+width:10px;height:10px;
+border-radius:50%;
+background:#e6c477;
+left:38px;top:42px;
+}
+
+/* LOCKER */
+.locker{
+position:absolute;
+right:18px;
+bottom:70px;
+width:105px;
+height:180px;
+background:linear-gradient(90deg,#555a67,#222630,#5b5e68);
+border:5px solid #8d93a2;
+border-radius:8px;
+cursor:pointer;
+box-shadow:0 0 25px #000;
+}
+.locker .handle{
+position:absolute;
+right:14px;
+top:78px;
+width:20px;height:35px;
+border:4px solid #ddd;
+border-radius:5px;
+}
+.locker .screen{
+display:block;
+position:absolute;
+top:25px;left:15px;
+width:70px;height:32px;
+background:#07150e;
+border:2px solid #49ff9b;
+color:#49ff9b;
+font-size:8px;
+text-align:center;
+padding-top:8px;
+}
+
+/* DOOR */
+.door{
+position:absolute;
+left:15px;
+bottom:0;
+width:85px;
+height:180px;
+background:#3b2547;
+border:5px solid #21152b;
+}
+.door:after{
+content:"";
+position:absolute;
+right:10px;top:90px;
+width:9px;height:9px;
+border-radius:50%;
+background:#e8c56c;
+}
+
+/* MESSAGE */
+.message{
+margin:16px auto 0;
+padding:15px;
+border-radius:15px;
+background:#111226;
+border:1px solid #38386b;
+text-align:center;
+font-size:13px;
+color:#d8d8ed;
+min-height:48px;
+}
+
+.object{
+transition:.2s;
+}
+.object:hover{
+filter:brightness(1.25);
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:#000b;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:50;
+}
+.modal.show{display:flex}
+.card{
+width:min(420px,100%);
+background:linear-gradient(145deg,#181a35,#0d0e1d);
+border:1px solid #5960a4;
+border-radius:24px;
+padding:25px;
+text-align:center;
+box-shadow:0 0 50px #000;
+}
+.card h2{
+margin-top:0;
+color:#8eeaff;
+}
+.card p{
+color:#c9c9d8;
+line-height:1.6;
+font-size:14px;
+}
+.close{
+margin-top:15px;
+padding:11px 25px;
+border:0;
+border-radius:25px;
+background:#292b4d;
+color:#fff;
+}
+
+/* CODE */
+.codebox{
+font-size:32px;
+letter-spacing:6px;
+font-weight:900;
+color:#49ff9b;
+background:#020804;
+border:1px solid #49ff9b;
+padding:18px;
+border-radius:12px;
+margin:18px 0;
+box-shadow:0 0 25px #49ff9b44;
+}
+
+.input{
+width:100%;
+padding:15px;
+background:#070812;
+border:1px solid #555b83;
+border-radius:12px;
+color:white;
+text-align:center;
+font-size:22px;
+letter-spacing:5px;
+outline:none;
+}
+.input:focus{
+border-color:#00d9ff;
+box-shadow:0 0 15px #00d9ff55;
+}
+
+.submit{
+margin-top:14px;
+width:100%;
+padding:14px;
+border:0;
+border-radius:12px;
+background:linear-gradient(90deg,#5d3cff,#00b8e6);
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.hint{
+color:#777;
+font-size:11px;
+margin-top:12px;
+}
+
+/* WIN */
+#win{
+background:radial-gradient(circle,#173c35,#080914 65%);
+text-align:center;
+padding:30px 20px;
+}
+.trophy{
+font-size:85px;
+margin-top:80px;
+animation:float 2s infinite;
+}
+.winTitle{
+font-size:38px;
+font-weight:900;
+letter-spacing:3px;
+color:#49ff9b;
+text-shadow:0 0 25px #49ff9b;
+}
+.final{
+max-width:400px;
+margin:25px auto;
+padding:22px;
+border:1px solid #49ff9b;
+border-radius:20px;
+background:#06120ddd;
+}
+.final small{
+color:#aaa;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- OPENING -->
+<section id="opening" class="screen active">
+<div class="stars"></div>
 
 <div class="logo">VIBE ON AGENCY PRESENTS</div>
 
-<h1>THE LAST 15</h1>
+<div class="title">THE LOCKER</div>
 
-<div class="sub">SOLVE • SURVIVE • CHOOSE</div>
-
-<div id="login" class="card">
-
-<div class="badge">LIMITED ENTRY • 15 PLAYERS</div>
-
-<label>ENTER YOUR PLAYER NUMBER</label>
-
-<input id="player" type="number" min="1" max="15"
-placeholder="Player 01 - 15">
-
-<button onclick="joinGame()">ENTER THE GAME</button>
-
-<div class="footer">
-15 ENTER • ONE SURVIVES
+<div class="subtitle">
+A 5 MINUTE MYSTERY
 </div>
 
+<div class="house-icon">🏠</div>
+
+<div class="warning">
+🔐 FIND • UNLOCK • ESCAPE
 </div>
 
-
-<div id="waiting" class="card hidden">
-
-<div class="round">THE OVERSEER</div>
-
-<h2 style="text-align:center">WELCOME PLAYER <span id="playerNumber"></span></h2>
-
-<p class="status">
-The game has not started yet.
+<p style="position:relative;color:#ddd;line-height:1.7">
+Someone left a secret inside this house.<br>
+You have <b>5 minutes</b> to find it.
 </p>
 
-<p class="status">
-Stay ready. Your first task can appear at any moment.
+<button class="mainbtn" onclick="startGame()">
+🔊 ENTER THE HOUSE
+</button>
+
+<div class="small">
+Sound ON • Best played with earphones
+</div>
+</section>
+
+
+<!-- GAME -->
+<section id="game" class="screen">
+
+<div class="topbar">
+<div>
+<div class="round">ROUND 01</div>
+<b>THE LOCKER</b>
+</div>
+
+<div class="timer" id="timer">05:00</div>
+</div>
+
+<div class="house">
+
+<div class="instruction" id="instruction">
+Find the first clue inside the house.
+</div>
+
+<div class="room">
+
+<div class="window">
+<div class="moon"></div>
+</div>
+
+<div class="painting object" onclick="paintingClue()">
+<span>?</span>
+</div>
+
+<div class="sofa object" onclick="sofaClue()">
+</div>
+
+<div class="table object" onclick="tableClue()">
+<div class="book object" onclick="bookClue(event)"></div>
+</div>
+
+<div class="drawer object" onclick="drawerClue()"></div>
+
+<div class="locker object" onclick="openLocker()">
+<div class="screen">LOCKED</div>
+<div class="handle"></div>
+</div>
+
+<div class="door"></div>
+
+</div>
+
+<div class="message" id="message">
+The house is silent...
+Something is waiting for you.
+</div>
+
+</div>
+</section>
+
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="card" id="modalCard"></div>
+</div>
+
+
+<!-- WIN -->
+<section id="win" class="screen">
+
+<div class="trophy">🏆</div>
+
+<div class="winTitle">MISSION COMPLETE</div>
+
+<p style="color:#ccc">
+You found the secret inside the house.
 </p>
 
-<div class="timer">•••</div>
-
+<div class="final">
+<small>YOUR WINNING CODE</small>
+<div class="codebox">LOCK-427-X</div>
+<p style="color:#aaa;font-size:13px">
+Send this code to the HOST immediately.
+</p>
 </div>
 
-
-<div id="game" class="card hidden">
-
-<div class="round">ROUND <span id="roundNumber">1</span></div>
-
-<h2 style="text-align:center">THE FIRST CLUE</h2>
-
-<div class="timer" id="timer">60</div>
-
-<div class="question">
-I am a number.<br><br>
-I am greater than 10.<br>
-I am less than 20.<br>
-I am even.<br><br>
-<strong>What am I?</strong>
-</div>
-
-<div class="answer">
-
-<button class="choice" onclick="answer(12)">12</button>
-<button class="choice" onclick="answer(14)">14</button>
-<button class="choice" onclick="answer(16)">16</button>
-<button class="choice" onclick="answer(18)">18</button>
-
-</div>
-
-<div id="result"></div>
-
-</div>
-
-
-<div id="finished" class="card hidden">
-
-<div class="round">ROUND COMPLETE</div>
-
-<h2 style="text-align:center">YOUR ANSWER HAS BEEN LOCKED</h2>
-
-<p class="status">
-The Overseer is checking all submissions.
+<p style="color:#777;font-size:11px">
+THE LAST 15 • ROUND 01
 </p>
 
-<div class="timer">?</div>
-
-<p class="status">
-Wait for the result...
-</p>
-
-</div>
-
-
-<div class="footer">
-THE LAST 15 • VIBE ON AGENCY
-</div>
-
-</div>
+</section>
 
 
 <script>
-
-let playerNumber = "";
-let time = 60;
+let time=300;
 let timerInterval;
+let hasKey=false;
+let started=false;
+let finished=false;
+let audioCtx=null;
 
-function joinGame(){
-
- const p = document.getElementById("player").value;
-
- if(p < 1 || p > 15){
-   alert("Player number 01 - 15 enter karo.");
-   return;
- }
-
- playerNumber = String(p).padStart(2,"0");
-
- document.getElementById("login").classList.add("hidden");
- document.getElementById("waiting").classList.remove("hidden");
-
- document.getElementById("playerNumber").innerText = playerNumber;
-
- /*
-   DEMO:
-   5 seconds ke baad round start hoga.
-   Real multiplayer version mein host button se
-   round start karwayenge.
- */
-
- setTimeout(startRound,5000);
+/* SOUND ENGINE */
+function audio(){
+if(!audioCtx){
+audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+}
 }
 
-
-function startRound(){
-
- document.getElementById("waiting").classList.add("hidden");
- document.getElementById("game").classList.remove("hidden");
-
- time = 60;
-
- document.getElementById("timer").innerText = time;
-
- timerInterval = setInterval(function(){
-
-   time--;
-
-   document.getElementById("timer").innerText = time;
-
-   if(time <= 0){
-     clearInterval(timerInterval);
-
-     document.getElementById("result").innerHTML =
-     '<div class="correct">TIME OVER</div>';
-   }
-
- },1000);
+function beep(freq,duration,type="sine",volume=.05){
+try{
+audio();
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.type=type;
+o.frequency.value=freq;
+g.gain.value=volume;
+o.connect(g);
+g.connect(audioCtx.destination);
+o.start();
+g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+o.stop(audioCtx.currentTime+duration);
+}catch(e){}
 }
 
-
-function answer(value){
-
- clearInterval(timerInterval);
-
- if(value === 14){
-
-   document.getElementById("result").innerHTML =
-   '<div class="correct">✓ CORRECT — ANSWER LOCKED</div>';
-
- }else{
-
-   document.getElementById("result").innerHTML =
-   '<div style="color:#ff7777;text-align:center;margin-top:15px">✕ WRONG ANSWER</div>';
-
- }
-
- document.querySelectorAll(".choice").forEach(function(btn){
-   btn.disabled = true;
- });
-
- setTimeout(function(){
-
-   document.getElementById("game").classList.add("hidden");
-   document.getElementById("finished").classList.remove("hidden");
-
- },1500);
-
+function clickSound(){
+beep(650,.08,"square",.035);
 }
 
+function successSound(){
+beep(520,.12,"sine",.07);
+setTimeout(()=>beep(780,.15,"sine",.07),100);
+setTimeout(()=>beep(1040,.25,"sine",.08),220);
+}
+
+function wrongSound(){
+beep(130,.25,"sawtooth",.05);
+}
+
+/* START */
+function startGame(){
+
+audio();
+
+document.getElementById("opening").classList.remove("active");
+document.getElementById("game").classList.add("active");
+
+started=true;
+
+clickSound();
+
+timerInterval=setInterval(()=>{
+time--;
+
+let m=Math.floor(time/60);
+let s=time%60;
+
+document.getElementById("timer").textContent=
+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+
+if(time<=30){
+document.getElementById("timer").classList.add("danger");
+if(time%2===0) beep(700,.04,"square",.02);
+}
+
+if(time<=0){
+clearInterval(timerInterval);
+timeUp();
+}
+},1000);
+}
+
+/* MODAL */
+function show(title,text,button="CONTINUE"){
+document.getElementById("modalCard").innerHTML=
+`
+<h2>${title}</h2>
+<p>${text}</p>
+<button class="close" onclick="closeModal()">${button}</button>
+`;
+document.getElementById("modal").classList.add("show");
+}
+
+function closeModal(){
+document.getElementById("modal").classList.remove("show");
+}
+
+/* CLUES */
+function paintingClue(){
+
+clickSound();
+
+show(
+"🖼️ PAINTING",
+`A strange message is hidden behind the frame.<br><br>
+<b>"Where people sit, the next clue waits."</b><br><br>
+Maybe you should search somewhere comfortable...`
+);
+
+document.getElementById("instruction").textContent=
+"Clue found. Search the sofa.";
+}
+
+function sofaClue(){
+
+clickSound();
+
+show(
+"🛋️ UNDER THE SOFA",
+`You find a tiny piece of paper.<br><br>
+<b>"The key is not here.<br>
+Look where things are placed."</b><br><br>
+A table might be worth checking.`
+);
+
+document.getElementById("instruction").textContent=
+"Search the table.";
+}
+
+function tableClue(){
+
+clickSound();
+
+show(
+"🪵 THE TABLE",
+`There is an old book on the table.<br><br>
+The book looks suspicious...<br>
+Maybe you should open it.`
+);
+
+document.getElementById("instruction").textContent=
+"Find and open the book.";
+}
+
+function bookClue(e){
+
+if(e)e.stopPropagation();
+
+clickSound();
+
+hasKey=true;
+
+show(
+"📖 SECRET PAGE",
+`You open the book...<br><br>
+A small <b>🗝️ KEY</b> falls out!<br><br>
+The page says:<br>
+<b>"The locker has been waiting for you."</b>`
+);
+
+document.getElementById("instruction").textContent=
+"🗝️ You have the key. Open the locker!";
+successSound();
+}
+
+function drawerClue(){
+
+clickSound();
+
+show(
+"🔒 LOCKED DRAWER",
+`This drawer is locked.<br><br>
+It doesn't seem to be the important one.<br>
+Keep searching the room.`
+);
+}
+
+/* LOCKER */
+function openLocker(){
+
+clickSound();
+
+if(!hasKey){
+
+wrongSound();
+
+show(
+"🔐 LOCKER LOCKED",
+`You found the locker!<br><br>
+But it needs a <b>KEY</b> first.<br>
+Search the house carefully.`
+);
+
+return;
+}
+
+show(
+"🗝️ KEY ACCEPTED",
+`The key fits perfectly...<br><br>
+<b>CLICK... CLICK...</b><br><br>
+The locker is now powered on.`
+);
+
+setTimeout(()=>{
+closeModal();
+lockerCode();
+},1300);
+}
+
+function lockerCode(){
+
+document.getElementById("modalCard").innerHTML=
+`
+<h2>🔐 LOCKER ACTIVATED</h2>
+
+<p>
+The screen lights up.
+<br><br>
+<b>ENTER THE 3-DIGIT HOUSE CODE</b>
+</p>
+
+<input
+id="codeInput"
+class="input"
+inputmode="numeric"
+maxlength="3"
+placeholder="___"
+>
+
+<button class="submit" onclick="checkCode()">
+UNLOCK LOCKER
+</button>
+
+<div class="hint">
+Hint: Look at the number connected to this house.
+</div>
+`;
+
+document.getElementById("modal").classList.add("show");
+
+setTimeout(()=>{
+document.getElementById("codeInput").focus();
+},200);
+}
+
+function checkCode(){
+
+let code=document.getElementById("codeInput").value.trim();
+
+if(code==="427"){
+
+successSound();
+
+finished=true;
+
+clearInterval(timerInterval);
+
+document.getElementById("modal").classList.remove("show");
+
+setTimeout(()=>{
+document.getElementById("game").classList.remove("active");
+document.getElementById("win").classList.add("active");
+},400);
+
+}else{
+
+wrongSound();
+
+document.getElementById("codeInput").value="";
+
+show(
+"❌ WRONG CODE",
+`The locker rejects the code.<br><br>
+You still have time.<br>
+Look at the clue again.`
+);
+}
+}
+
+function timeUp(){
+
+finished=true;
+
+wrongSound();
+
+show(
+"⏰ TIME'S UP",
+`The locker has shut down.<br><br>
+You couldn't recover the secret in time.`
+,"CLOSE"
+);
+}
 </script>
 
 </body>
