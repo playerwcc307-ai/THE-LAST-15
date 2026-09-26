@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>THE LAST 15</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#05070d;
+ color:white;
+ font-family:Arial,sans-serif;
+ min-height:100vh;
+}
+.container{
+ max-width:520px;
+ margin:auto;
+ padding:25px 18px;
+}
+.logo{
+ text-align:center;
+ letter-spacing:5px;
+ font-size:14px;
+ color:#aaa;
+ margin-top:15px;
+}
+h1{
+ text-align:center;
+ font-size:42px;
+ margin:15px 0 5px;
+ letter-spacing:3px;
+}
+.sub{
+ text-align:center;
+ color:#aaa;
+ font-size:13px;
+ letter-spacing:2px;
+}
+.card{
+ background:#0d111c;
+ border:1px solid #293044;
+ border-radius:18px;
+ padding:22px;
+ margin-top:25px;
+ box-shadow:0 0 30px #000;
+}
+label{
+ display:block;
+ color:#aaa;
+ margin-bottom:8px;
+ font-size:13px;
+}
+input{
+ width:100%;
+ padding:15px;
+ border-radius:10px;
+ border:1px solid #394156;
+ background:#080b13;
+ color:white;
+ font-size:16px;
+ outline:none;
+}
+button{
+ width:100%;
+ padding:15px;
+ margin-top:15px;
+ border:0;
+ border-radius:10px;
+ background:#b9c0cc;
+ color:#05070d;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer;
+}
+button:hover{background:white}
+.hidden{display:none}
+.status{
+ text-align:center;
+ color:#aaa;
+ margin:15px 0;
+}
+.round{
+ text-align:center;
+ color:#d8dce5;
+ letter-spacing:3px;
+ font-size:13px;
+}
+.timer{
+ text-align:center;
+ font-size:48px;
+ font-weight:bold;
+ margin:20px 0;
+}
+.question{
+ font-size:20px;
+ line-height:1.5;
+ text-align:center;
+}
+.answer{
+ margin-top:20px;
+}
+.choice{
+ background:#151b29;
+ color:white;
+ border:1px solid #343d52;
+}
+.choice:hover{
+ background:#252d40;
+}
+.correct{
+ color:#67e8a5;
+ text-align:center;
+ margin-top:15px;
+}
+.footer{
+ text-align:center;
+ color:#555;
+ font-size:11px;
+ margin-top:35px;
+ letter-spacing:2px;
+}
+.badge{
+ display:inline-block;
+ padding:7px 12px;
+ border:1px solid #555;
+ border-radius:20px;
+ font-size:11px;
+ color:#aaa;
+ margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">VIBE ON AGENCY PRESENTS</div>
+
+<h1>THE LAST 15</h1>
+
+<div class="sub">SOLVE • SURVIVE • CHOOSE</div>
+
+<div id="login" class="card">
+
+<div class="badge">LIMITED ENTRY • 15 PLAYERS</div>
+
+<label>ENTER YOUR PLAYER NUMBER</label>
+
+<input id="player" type="number" min="1" max="15"
+placeholder="Player 01 - 15">
+
+<button onclick="joinGame()">ENTER THE GAME</button>
+
+<div class="footer">
+15 ENTER • ONE SURVIVES
+</div>
+
+</div>
+
+
+<div id="waiting" class="card hidden">
+
+<div class="round">THE OVERSEER</div>
+
+<h2 style="text-align:center">WELCOME PLAYER <span id="playerNumber"></span></h2>
+
+<p class="status">
+The game has not started yet.
+</p>
+
+<p class="status">
+Stay ready. Your first task can appear at any moment.
+</p>
+
+<div class="timer">•••</div>
+
+</div>
+
+
+<div id="game" class="card hidden">
+
+<div class="round">ROUND <span id="roundNumber">1</span></div>
+
+<h2 style="text-align:center">THE FIRST CLUE</h2>
+
+<div class="timer" id="timer">60</div>
+
+<div class="question">
+I am a number.<br><br>
+I am greater than 10.<br>
+I am less than 20.<br>
+I am even.<br><br>
+<strong>What am I?</strong>
+</div>
+
+<div class="answer">
+
+<button class="choice" onclick="answer(12)">12</button>
+<button class="choice" onclick="answer(14)">14</button>
+<button class="choice" onclick="answer(16)">16</button>
+<button class="choice" onclick="answer(18)">18</button>
+
+</div>
+
+<div id="result"></div>
+
+</div>
+
+
+<div id="finished" class="card hidden">
+
+<div class="round">ROUND COMPLETE</div>
+
+<h2 style="text-align:center">YOUR ANSWER HAS BEEN LOCKED</h2>
+
+<p class="status">
+The Overseer is checking all submissions.
+</p>
+
+<div class="timer">?</div>
+
+<p class="status">
+Wait for the result...
+</p>
+
+</div>
+
+
+<div class="footer">
+THE LAST 15 • VIBE ON AGENCY
+</div>
+
+</div>
+
+
+<script>
+
+let playerNumber = "";
+let time = 60;
+let timerInterval;
+
+function joinGame(){
+
+ const p = document.getElementById("player").value;
+
+ if(p < 1 || p > 15){
+   alert("Player number 01 - 15 enter karo.");
+   return;
+ }
+
+ playerNumber = String(p).padStart(2,"0");
+
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("waiting").classList.remove("hidden");
+
+ document.getElementById("playerNumber").innerText = playerNumber;
+
+ /*
+   DEMO:
+   5 seconds ke baad round start hoga.
+   Real multiplayer version mein host button se
+   round start karwayenge.
+ */
+
+ setTimeout(startRound,5000);
+}
+
+
+function startRound(){
+
+ document.getElementById("waiting").classList.add("hidden");
+ document.getElementById("game").classList.remove("hidden");
+
+ time = 60;
+
+ document.getElementById("timer").innerText = time;
+
+ timerInterval = setInterval(function(){
+
+   time--;
+
+   document.getElementById("timer").innerText = time;
+
+   if(time <= 0){
+     clearInterval(timerInterval);
+
+     document.getElementById("result").innerHTML =
+     '<div class="correct">TIME OVER</div>';
+   }
+
+ },1000);
+}
+
+
+function answer(value){
+
+ clearInterval(timerInterval);
+
+ if(value === 14){
+
+   document.getElementById("result").innerHTML =
+   '<div class="correct">✓ CORRECT — ANSWER LOCKED</div>';
+
+ }else{
+
+   document.getElementById("result").innerHTML =
+   '<div style="color:#ff7777;text-align:center;margin-top:15px">✕ WRONG ANSWER</div>';
+
+ }
+
+ document.querySelectorAll(".choice").forEach(function(btn){
+   btn.disabled = true;
+ });
+
+ setTimeout(function(){
+
+   document.getElementById("game").classList.add("hidden");
+   document.getElementById("finished").classList.remove("hidden");
+
+ },1500);
+
+}
+
+</script>
+
+</body>
+</html>
